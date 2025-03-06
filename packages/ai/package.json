@@ -97,12 +97,12 @@
     "node": ">=18"
   },
   "publishConfig": {
-    "access": "public"
+    "registry": "https://npm.pkg.github.com"
   },
   "homepage": "https://sdk.vercel.ai/docs",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vercel/ai.git"
+    "url": "git+https://github.com/InteractionCo/ai.git"
   },
   "bugs": {
     "url": "https://github.com/vercel/ai/issues"
