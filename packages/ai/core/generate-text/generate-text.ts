@@ -56,6 +56,15 @@ export type GenerateTextOnStepFinishCallback<TOOLS extends ToolSet> = (
 ) => Promise<void> | void;
 
 /**
+Callback that is set using the `beforeToolUse` option.
+
+@param text - The generated text content, or undefined if there is no text content.
+ */
+export type GenerateTextBeforeToolUseCallback = (
+  params: { text?: string },
+) => Promise<void> | void;
+
+/**
 Generate a text and call tools for a given prompt using a language model.
 
 This function does not stream the output. If you want to stream the output, use `streamText` instead.
@@ -98,6 +107,7 @@ If set and supported by the model, calls will generate deterministic results.
 @param experimental_generateMessageId - Generate a unique ID for each message.
 
 @param onStepFinish - Callback that is called when each step (LLM call) is finished, including intermediate steps.
+@param beforeToolUse - Callback that is called before executing tools, receiving the generated text as a parameter.
 
 @returns
 A result object that contains the generated text, the results of the tool calls, and additional information.
@@ -130,6 +140,7 @@ export async function generateText<
     currentDate = () => new Date(),
   } = {},
   onStepFinish,
+  beforeToolUse,
   ...settings
 }: CallSettings &
   Prompt & {
@@ -206,6 +217,11 @@ A function that attempts to repair a tool call that failed to parse.
     Callback that is called when each step (LLM call) is finished, including intermediate steps.
     */
     onStepFinish?: GenerateTextOnStepFinishCallback<TOOLS>;
+    
+    /**
+    Callback that is called before executing tools, receiving the generated text as a parameter.
+    */
+    beforeToolUse?: GenerateTextBeforeToolUseCallback;
 
     /**
      * Internal. For test use only. May change without notice.
@@ -424,6 +440,8 @@ A function that attempts to repair a tool call that failed to parse.
                 telemetry,
                 messages: stepInputMessages,
                 abortSignal,
+                beforeToolUse,
+                text: currentModelResponse.text,
               });
 
         // token usage:
@@ -601,6 +619,8 @@ async function executeTools<TOOLS extends ToolSet>({
   telemetry,
   messages,
   abortSignal,
+  beforeToolUse,
+  text,
 }: {
   toolCalls: ToolCallArray<TOOLS>;
   tools: TOOLS;
@@ -608,7 +628,14 @@ async function executeTools<TOOLS extends ToolSet>({
   telemetry: TelemetrySettings | undefined;
   messages: CoreMessage[];
   abortSignal: AbortSignal | undefined;
+  beforeToolUse?: GenerateTextBeforeToolUseCallback;
+  text?: string;
 }): Promise<ToolResultArray<TOOLS>> {
+  // Call the beforeToolUse callback if provided
+  if (beforeToolUse) {
+    await beforeToolUse({ text });
+  }
+
   const toolResults = await Promise.all(
     toolCalls.map(async ({ toolCallId, toolName, args }) => {
       const tool = tools[toolName];
