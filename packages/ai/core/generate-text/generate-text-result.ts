@@ -1,4 +1,3 @@
-import { CoreAssistantMessage, CoreToolMessage } from '../prompt';
 import {
   CallWarning,
   FinishReason,
@@ -9,8 +8,9 @@ import { Source } from '../types/language-model';
 import { LanguageModelRequestMetadata } from '../types/language-model-request-metadata';
 import { LanguageModelResponseMetadata } from '../types/language-model-response-metadata';
 import { LanguageModelUsage } from '../types/usage';
+import { GeneratedFile } from './generated-file';
 import { ReasoningDetail } from './reasoning-detail';
-import { StepResult } from './step-result';
+import { ResponseMessage, StepResult } from './step-result';
 import { ToolCallArray } from './tool-call';
 import { ToolResultArray } from './tool-result';
 import { ToolSet } from './tool-set';
@@ -31,6 +31,11 @@ has only generated text.
    */
   // TODO v5: rename to `reasoningText`
   readonly reasoning: string | undefined;
+
+  /**
+The files that were generated. Empty array if no files were generated.
+     */
+  readonly files: Array<GeneratedFile>;
 
   /**
 The full reasoning that the model has generated.
@@ -98,7 +103,7 @@ When there are tool results, there is an additional tool message with the tool r
 If there are tools that do not have execute functions, they are not included in the tool results and
 need to be added separately.
        */
-    messages: Array<CoreAssistantMessage | CoreToolMessage>;
+    messages: Array<ResponseMessage>;
 
     /**
 Response body (available only for providers that use HTTP requests).

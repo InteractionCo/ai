@@ -1,5 +1,66 @@
 # @ai-sdk/openai
 
+## 1.3.0
+
+### Minor Changes
+
+- 5bc638d: AI SDK 4.2
+
+### Patch Changes
+
+- Updated dependencies [5bc638d]
+  - @ai-sdk/provider@1.1.0
+  - @ai-sdk/provider-utils@2.2.0
+
+## 1.2.8
+
+### Patch Changes
+
+- 9f4f1bc: feat (provider/openai): pdf support for chat language models
+
+## 1.2.7
+
+### Patch Changes
+
+- Updated dependencies [d0c4659]
+  - @ai-sdk/provider-utils@2.1.15
+
+## 1.2.6
+
+### Patch Changes
+
+- Updated dependencies [0bd5bc6]
+  - @ai-sdk/provider@1.0.12
+  - @ai-sdk/provider-utils@2.1.14
+
+## 1.2.5
+
+### Patch Changes
+
+- 2e1101a: feat (provider/openai): pdf input support
+- Updated dependencies [2e1101a]
+  - @ai-sdk/provider@1.0.11
+  - @ai-sdk/provider-utils@2.1.13
+
+## 1.2.4
+
+### Patch Changes
+
+- 523f128: feat (provider/openai): add strictSchemas option to responses model
+
+## 1.2.3
+
+### Patch Changes
+
+- Updated dependencies [1531959]
+  - @ai-sdk/provider-utils@2.1.12
+
+## 1.2.2
+
+### Patch Changes
+
+- e3a389e: feat (provider/openai): support responses api
+
 ## 1.2.1
 
 ### Patch Changes

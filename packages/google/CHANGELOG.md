@@ -1,5 +1,73 @@
 # @ai-sdk/google
 
+## 1.2.1
+
+### Patch Changes
+
+- 994a13b: feat (provider/google): support IMAGE_SAFETY finish reason
+
+## 1.2.0
+
+### Minor Changes
+
+- 5bc638d: AI SDK 4.2
+
+### Patch Changes
+
+- Updated dependencies [5bc638d]
+  - @ai-sdk/provider@1.1.0
+  - @ai-sdk/provider-utils@2.2.0
+
+## 1.1.27
+
+### Patch Changes
+
+- d0c4659: feat (provider-utils): parseProviderOptions function
+- Updated dependencies [d0c4659]
+  - @ai-sdk/provider-utils@2.1.15
+
+## 1.1.26
+
+### Patch Changes
+
+- 0bd5bc6: feat (ai): support model-generated files
+- Updated dependencies [0bd5bc6]
+  - @ai-sdk/provider@1.0.12
+  - @ai-sdk/provider-utils@2.1.14
+
+## 1.1.25
+
+### Patch Changes
+
+- Updated dependencies [2e1101a]
+  - @ai-sdk/provider@1.0.11
+  - @ai-sdk/provider-utils@2.1.13
+
+## 1.1.24
+
+### Patch Changes
+
+- 5261762: fix (provider/google): ensure correct finishReason for tool calls in streaming response
+
+## 1.1.23
+
+### Patch Changes
+
+- 413f5a7: feat (providers/google): add gemma 3 model id
+
+## 1.1.22
+
+### Patch Changes
+
+- 62f46fd: feat (provider/google): add support for dynamic retrieval
+
+## 1.1.21
+
+### Patch Changes
+
+- Updated dependencies [1531959]
+  - @ai-sdk/provider-utils@2.1.12
+
 ## 1.1.20
 
 ### Patch Changes

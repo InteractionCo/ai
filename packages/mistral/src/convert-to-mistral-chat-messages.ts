@@ -40,9 +40,26 @@ export function convertToMistralChatMessages(
                 };
               }
               case 'file': {
-                throw new UnsupportedFunctionalityError({
-                  functionality: 'File content parts in user messages',
-                });
+                if (!(part.data instanceof URL)) {
+                  throw new UnsupportedFunctionalityError({
+                    functionality: 'File content parts in user messages',
+                  });
+                }
+
+                switch (part.mimeType) {
+                  case 'application/pdf': {
+                    return {
+                      type: 'document_url',
+                      document_url: part.data.toString(),
+                    };
+                  }
+                  default: {
+                    throw new UnsupportedFunctionalityError({
+                      functionality:
+                        'Only PDF files are supported in user messages',
+                    });
+                  }
+                }
               }
             }
           }),
@@ -64,10 +81,6 @@ export function convertToMistralChatMessages(
               text += part.text;
               break;
             }
-            case 'redacted-reasoning':
-            case 'reasoning': {
-              break; // ignored
-            }
             case 'tool-call': {
               toolCalls.push({
                 id: part.toolCallId,
@@ -78,10 +91,6 @@ export function convertToMistralChatMessages(
                 },
               });
               break;
-            }
-            default: {
-              const _exhaustiveCheck: never = part;
-              throw new Error(`Unsupported part: ${_exhaustiveCheck}`);
             }
           }
         }
