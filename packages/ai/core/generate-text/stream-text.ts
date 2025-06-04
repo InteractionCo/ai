@@ -141,6 +141,13 @@ Details for all steps.
 ) => Promise<void> | void;
 
 /**
+Callback that is set using the `beforeToolUse` option.
+
+@param currentModelResponse - The generated model response
+ */
+export type StreamTextBeforeToolUseCallback = () => Promise<void> | void;
+
+/**
 Generate a text and call tools for a given prompt using a language model.
 
 This function streams the output. If you do not want to stream the output, use `generateText` instead.
@@ -184,6 +191,7 @@ If set and supported by the model, calls will generate deterministic results.
 @param onError - Callback that is called when an error occurs during streaming. You can use it to log errors.
 @param onStepFinish - Callback that is called when each step (LLM call) is finished, including intermediate steps.
 @param onFinish - Callback that is called when the LLM response and all request tool executions
+@param beforeToolUse - Callback that is invoked before a tool is used.
 (for tools that have an `execute` function) are finished.
 
 @return
@@ -219,6 +227,7 @@ export function streamText<
   onError,
   onFinish,
   onStepFinish,
+  beforeToolUse,
   _internal: {
     now = originalNow,
     generateId = originalGenerateId,
@@ -342,6 +351,11 @@ Callback that is called when each step (LLM call) is finished, including interme
     onStepFinish?: StreamTextOnStepFinishCallback<TOOLS>;
 
     /**
+Callback that is invoked before a tool is used.
+    */
+    beforeToolUse?: StreamTextBeforeToolUseCallback;
+
+    /**
 Internal. For test use only. May change without notice.
      */
     _internal?: {
@@ -374,6 +388,7 @@ Internal. For test use only. May change without notice.
     onError,
     onFinish,
     onStepFinish,
+    beforeToolUse,
     now,
     currentDate,
     generateId,
@@ -552,6 +567,7 @@ class DefaultStreamTextResult<TOOLS extends ToolSet, OUTPUT, PARTIAL_OUTPUT>
     onError,
     onFinish,
     onStepFinish,
+    beforeToolUse,
   }: {
     model: LanguageModel;
     telemetry: TelemetrySettings | undefined;
@@ -582,6 +598,7 @@ class DefaultStreamTextResult<TOOLS extends ToolSet, OUTPUT, PARTIAL_OUTPUT>
     onError: undefined | StreamTextOnErrorCallback;
     onFinish: undefined | StreamTextOnFinishCallback<TOOLS>;
     onStepFinish: undefined | StreamTextOnStepFinishCallback<TOOLS>;
+    beforeToolUse: undefined | StreamTextBeforeToolUseCallback;
   }) {
     if (maxSteps < 1) {
       throw new InvalidArgumentError({
@@ -1053,6 +1070,7 @@ class DefaultStreamTextResult<TOOLS extends ToolSet, OUTPUT, PARTIAL_OUTPUT>
             messages: stepInputMessages,
             repairToolCall,
             abortSignal,
+            beforeToolUse,
           });
 
           const stepRequest = request ?? {};
