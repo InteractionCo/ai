@@ -484,7 +484,15 @@ A function that attempts to repair a tool call that failed to parse.
         );
 
         if (beforeToolUse) {
-          await beforeToolUse(currentModelResponse);
+          await beforeToolUse({
+            ...currentModelResponse,
+            toolCalls: currentToolCalls.map(toolCall => ({
+              toolCallType: 'function' as const,
+              toolCallId: toolCall.toolCallId,
+              toolName: toolCall.toolName,
+              args: JSON.stringify(toolCall.args),
+            })),
+          });
         }
         // execute tools:
         currentToolResults =
